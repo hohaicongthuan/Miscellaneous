@@ -1,0 +1,37 @@
+Ring Oscillator
+.include 45nm_LP.lib
+.option TEMP = 25C
+
+    * Syntax for MOSFET
+    * MXXXXXXX nd ng ns nb mname <m = val > <l = val> <w = val>
+
+    // Pull-down network
+    M1 gate_1_out RgOsc_Out 0 0 NMOS
+    M2 gate_2_out res_1_out 0 0 NMOS
+    M3 gate_3_out res_2_out 0 0 NMOS
+
+    // Pull-up network
+    M4 gate_1_out RgOsc_Out vdd vdd PMOS
+    M5 gate_2_out res_1_out vdd vdd PMOS
+    M6 gate_3_out res_2_out vdd vdd PMOS
+
+    // Resistors
+    R1 gate_1_out res_1_out 1k
+    R2 gate_2_out res_2_out 1k
+    R3 gate_3_out RgOsc_Out 1k
+
+    // Capacitors
+    C1 res_1_out 0 1p
+    C2 res_2_out 0 1p
+    C3 RgOsc_Out 0 1p
+
+    // Power
+    V1 vdd 0 dc 1V
+
+.control
+    * General form: .tran tstep tstop <tstart<tmax>> <uic>
+    tran 10ns 1us
+    plot RgOsc_Out
+.endc
+
+.end

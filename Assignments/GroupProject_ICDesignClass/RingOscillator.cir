@@ -26,11 +26,11 @@ Ring Oscillator
     C3 RgOsc_Out 0 1p
 
     // Power
-    V1 vdd 0 dc 1V
+    V1 vdd 0 dc 2.5V
 
 .control
     * General form: .tran tstep tstop <tstart<tmax>> <uic>
-    tran 10ns 1us
+    tran 1ns 2us
     plot RgOsc_Out
 .endc
 

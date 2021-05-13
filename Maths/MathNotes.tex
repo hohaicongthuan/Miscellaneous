@@ -1,0 +1,286 @@
+% This is a comment
+
+\documentclass[a4paper, 11pt]{book}
+
+% Use packages here
+\usepackage[a4paper, inner=1cm, outer=1cm, left=1cm, right=1cm, top=2cm, bottom=2cm, bindingoffset=1cm]{geometry}
+\usepackage{blindtext} % This package is used for testing
+\usepackage[british]{babel} % This package is used for localisation
+\usepackage{paralist} % This package creates compact lists
+\usepackage{amsmath} % This package creates aligned fomulae
+\usepackage{multicol} % This package arranges contents in columns
+\usepackage{hyperref} % This package creates table of contents with clickable links
+
+% Setup for hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=black,
+}
+
+% Document begins here
+\begin{document}
+
+    %%%%%%%%%
+    % Title %
+    %%%%%%%%%
+    \title{MATHS NOTES}
+    \author{Thuan Hai Cong Ho}
+    \maketitle % Call this command to make title
+    
+    %%%%%%%%%%%%%%%%%%%%%
+    % Table of Contents %
+    %%%%%%%%%%%%%%%%%%%%%
+    \tableofcontents
+
+    %%%%%%%%%%%
+    % Chapter %
+    %%%%%%%%%%%
+    \chapter{Logarithm}
+    
+        %%%%%%%%%%%
+        % Section %
+        %%%%%%%%%%%
+        \section{Logarithm}
+        
+        % Align at equal sign using &=
+        \begin{multicols}{2}
+            \begin{align}
+                \log_{a}xy &= \log_{a}x + \log_{a}y\\
+                \log_{a}\frac{x}{y} &= \log_{a}x - \log_{a}y\\
+                \log_{a}\frac{1}{x} &= -\log_{a}x\\
+                \log_{a^{\beta}}x^{\alpha} &= \frac{\alpha}{\beta}\log_{a}x\\
+                \log_{a}a^{\alpha} &= \alpha
+            \end{align}
+            
+            \columnbreak
+
+            With $ a, b > 0, a \neq 1 $:
+            \begin{align}
+                \log_{a}1 &= 0\\
+                \log_{a}a &= 1\\
+                a^{\log_{a}b} &= b\\
+                \log_{a}a^{\alpha} &= \alpha\\
+                \log_{a}\sqrt[n]{b} &= \frac{1}{n}\log_{a}b
+            \end{align}
+        \end{multicols}
+
+        %%%%%%%%%%%
+        % Section %
+        %%%%%%%%%%%
+        \section{Natural Logarithm}
+
+        \begin{align}
+            e &= \lim_{n \rightarrow +\infty}\left(1+\frac{1}{n}\right)^{n}\\
+            e^{\ln{x}} &= x, &(x > 0)\\
+            \ln{e^{x}} &= x, &(x > 0)\\
+            \ln{u^{r}} &= r\ln{u}\\
+            a^{b} &= e^{b\ln{a}}
+        \end{align}
+    
+    % These are some lists:
+    % % Use this to create lists
+    % \begin{compactitem}
+    %     \item item 1
+    %     \item item 2
+    %     \begin{compactitem}
+    %         \item sub-item 2-1
+    %         \item sub-item 2-2
+    %         \item sub-item 2-3
+    %     \end{compactitem}
+    %     \item item 3
+    % \end{compactitem}
+
+    % % Use this to create numbered lists
+    % \begin{compactenum}
+    %     \item item 1
+    %     \item item 2
+    %         \begin{compactenum}
+    %             \item sub-item 2-1
+    %             \item sub-item 2-2
+    %             \item sub-item 2-3
+    %         \end{compactenum}
+    %     \item item 3
+    % \end{compactenum}
+
+    %%%%%%%%%%%
+    % Chapter %
+    %%%%%%%%%%%
+    \chapter{Derivative}
+
+    \begin{multicols}{3}
+        \begin{align}
+            (u \pm v)' &= u' \pm v'
+        \end{align}
+        \begin{align}
+            (uv)' &= u'v+uv'
+        \end{align}
+        \begin{align}
+            \left(\frac{u}{v}\right)' &= \frac{u'v-uv'}{v^{2}}
+        \end{align}
+    \end{multicols}
+
+    \begin{multicols}{2}
+        \begin{align}
+            (kx)' &= k, (k \text{ is a constant})\\
+            (x^{n})' &= nx^{n-1}\\
+            \left(\frac{1}{x}\right)' &= -\frac{1}{x^{2}}\\
+            (\sqrt{x})' &= \frac{1}{2\sqrt{x}}\\
+            (\sin{x})' &= \cos{x}\\
+            (\cos{x})' &= -\sin{x}\\
+            (\tan{x})' &= 1 + \tan^{2}{x} = \frac{1}{\cos^{2}{x}}\\
+            (\cot{x})' &= -(1+\cot^{2}{x}) = -\frac{1}{\sin^{2}{x}}\\
+            (e^{x})' &= e^{x}\\
+            (a^{x})' &= a^{x}\ln{a}\\
+            (\ln{x})' &= \frac{1}{x}\\
+            (\log_{a}x)' &= \frac{1}{x\ln{a}}\\
+            (\arcsin{x})' &= \frac{1}{\sqrt{1-x^{2}}}\\
+            (\arccos{x})' &= \frac{-1}{\sqrt{1-x^{2}}}\\
+            (\arctan{x})' &= \frac{1}{x^{2} + 1}\\
+            \left(\frac{ax+b}{cx+d}\right)' &= \frac{ad-bc}{(cx+d)^{2}}
+        \end{align}
+        \columnbreak
+    
+        \begin{align}
+            (ku)' &= ku', (k \text{ is a constant})\\
+            (u^{n})' &= nu^{n-1}u'\\
+            \left(\frac{1}{u}\right)' &= -\frac{u'}{u^{2}}\\
+            (\sqrt{u})' &= \frac{u'}{2\sqrt{u}}\\
+            (\sin{u})' &= \cos{u}u'\\
+            (\cos{u})' &= -\sin{u}u'\\
+            (\tan{u})' &= (1 + \tan^{2}{u})u' = \frac{u'}{\cos^{2}{u}}\\
+            (\cot{u})' &= -(1+\cot^{2}{u})u' = -\frac{u'}{\sin^{2}{u}}
+        \end{align}
+    \end{multicols}
+
+    % Use this command to break the page
+    % \newpage
+
+    %%%%%%%%%%%
+    % Chapter %
+    %%%%%%%%%%%
+    \chapter{Antiderivative}
+
+    \begin{multicols}{2}
+        \begin{align}
+            \int{0}dx &= c\\
+            \int{}dx &= x+c\\
+            \int{k}dx &= kx+c\\
+            \int{x^{n}}dx &= \frac{x^{n+1}}{n+1}+c, (n\neq-1)\\
+            \int{\frac{1}{x}}dx &= \ln{|x|}+c, (x\neq0)\\
+            \int{\frac{1}{x^{2}}}dx &= -\frac{1}{x}+c\\
+            \int{\frac{1}{x^{a}}}dx &= -\frac{1}{(a-1)x^{a-1}}+c\\
+            \int{e^{x}}dx &= e^{x} + c\\
+            \int{a^{x}}dx &= \frac{a^{x}}{\ln{a}}+c, (0<a\neq1)\\
+            \int{\cos{x}}dx &= \sin{x}+c\\
+            \int{\sin{x}}dx &= -\cos{x}+c\\
+            \int{\frac{1}{\cos^{2}x}}dx &= \int{1+\tan^{2}x}dx = \tan{x}+c\\
+            \int{\frac{1}{\sin^{2}x}}dx &= \int{1+\cot^{2}x}dx = \cot{x}+c\\
+            \int{\frac{1}{2\sqrt{x}}}dx &= \sqrt{x}+c\\
+            \int{(ax+b)^{\alpha}}dx &= \frac{1}{a}\frac{(ax+b)^{\alpha+1}}{\alpha+1}+c, (\alpha\neq-1)\\
+            \int{\frac{1}{ax+b}}dx &= \frac{1}{a}\ln{|ax+b|}+c
+        \end{align}
+        \columnbreak
+        \begin{align}
+            \int{e^{ax+b}}dx &= \frac{1}{a}e^{ax+b}+c\\
+            \int{m^{ax+b}}dx &= \frac{1}{a\ln{m}}m^{ax+b}+c\\
+            \int{\ln{(ax+b)}}dx &= \left(x+\frac{b}{a}\right)\ln{(ax+b)}-x+c\\
+            \int{\frac{dx}{\sqrt{a^{2}-x^{2}}}} &= \arcsin{\frac{x}{a}}+c, (a>0)\\
+            \int{\frac{dx}{\sqrt{a+x^{2}}}} &= \ln{|x+\sqrt{x^{2}+a}|}+c\\
+            \int{\frac{dx}{a^{2}+x^{2}}} &= \frac{1}{a}\arctan{\frac{x}{a}}+c, (a>0)\\
+            \int{\frac{dx}{a^{2}-x^{2}}} &= \frac{1}{2a}\ln{\left|\frac{a+x}{a-x}\right|}+c\\
+            \int{\cos{(ax+b)}}dx &= \frac{1}{a}\sin{(ax+b)}+c\\
+            \int{\sin{(ax+b)}}dx &= \frac{-1}{a}\cos{(ax+b)}+c\\
+            \int{\tan{(ax+b)}}dx &= \frac{-1}{a}\ln{|\cos{(ax+b}|}+c\\
+            \int{\cot{(ax+b)}}dx &= \frac{1}{a}\ln{|\sin{(ax+b}|}+c\\
+            \int{\frac{dx}{\sin^{2}{(ax+b)}}} &= \frac{-1}{a}\cot{(ax+b)}+c\\
+            \int{\frac{dx}{\cos^{2}{(ax+b)}}} &= \frac{1}{a}\tan{(ax+b)}+c
+        \end{align}
+    \end{multicols}
+
+    %%%%%%%%%%%
+    % Chapter %
+    %%%%%%%%%%%
+    \chapter{Trigonometry}
+
+    \begin{multicols}{2}  
+        
+        \begin{align}
+            \sin^{2}{x}+\cos^{2}{x}&=1\\
+            \sin{2x} &= \sin{x}\cos{x}\\
+            \sin{3x} &= 3\sin{x}-4\sin^{3}{x}\\
+            \sin^{2}{x} &= \frac{1-\cos{2x}}{2}
+        \end{align}
+
+        \begin{equation}
+            \begin{split}
+                \cos{2x} &= \cos^{2}{x}-\sin^{2}{x}\\
+                        &= 2\cos^{2}-1\\
+                        &= 1-\sin^{2}{x}\\
+            \end{split}
+        \end{equation}
+
+        \begin{align}
+            \cos^{2}{x} &= \frac{1+\cos{2x}}{2}\\
+            \sin{\alpha}\cos{\beta} &= \frac{1}{2}[\sin{(\alpha+\beta)}+\sin{(\alpha-\beta)}]\\
+            \cos{\alpha}\cos{\beta} &= \frac{1}{2}[\cos{(\alpha+\beta)}+\cos{(\alpha-\beta)}]\\
+            \sin{\alpha}\sin{\beta} &= \frac{1}{2}[\cos{(\alpha-\beta)}-\cos{(\alpha+\beta)}]
+        \end{align}
+
+    \end{multicols}
+
+    \begin{multicols}{2}
+
+        \begin{align}
+            \sin{2a} &= 2\sin{a}\cos{a}
+        \end{align}
+
+        \begin{equation}
+            \begin{split}
+                \cos{2a} &= \cos^{2}{a}-\sin^{2}{a}\\
+                &= 2\cos^{2}{a}-1\\
+                &=1-2\sin^{2}{a}
+            \end{split}
+        \end{equation}
+
+        \begin{align}
+            \tan{2a} &= \frac{2\tan{a}}{1-\tan^{2}{a}}
+        \end{align}
+            
+        \columnbreak
+
+        \begin{align}
+            \sin{3a} &= 3\sin{a}-4\sin^{3}{a}\\
+            \cos{3a} &= 4\cos^{3}{a}-3\cos{a}\\
+            \tan{3a} &= \frac{3\tan{a}-\tan^{3}{a}}{1-3\tan^{2}{a}}
+        \end{align}
+
+    \end{multicols}
+
+    \begin{multicols}{2}
+        \begin{align}
+            \sin^{2}{a} &= \frac{1-\cos{2a}}{2}\\
+            \sin^{3}{a} &= \frac{3\sin{a}-\sin{3a}}{4}\\
+            \sin^{4}{a} &= \frac{\cos{4a}-4\cos{2a}+3}{8}\\
+            \tan^{2}{a} &= \frac{1-\cos{2a}}{1+\cos{2a}}
+        \end{align}
+        \begin{align}
+            \cos^{2}{a} &= \frac{1+\cos{2a}}{2}\\
+            \cos^{3}{a} &= \frac{3\cos{a}+\cos{3a}}{4}\\
+            \cos^{4}{a} &= \frac{\cos{4a}+4\cos{2a}+3}{8}
+        \end{align}
+    \end{multicols}
+
+    %%%%%%%%%%%
+    % chapter %
+    %%%%%%%%%%%
+    \chapter{Series}
+    
+    \begin{align}
+        \sum_{n = 1}^{\infty}\frac{4(-1)^{n+1}}{2n-1}&=\pi\\
+        \sum_{n = 0}^{\infty}\frac{1}{n!}&=e
+    \end{align}
+
+\end{document}
+ 

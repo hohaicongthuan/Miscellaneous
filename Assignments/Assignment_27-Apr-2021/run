@@ -1,0 +1,285 @@
+#!/bin/bash 
+
+function Help() {
+    printf "\nUSAGE\n\n"
+    echo "./run     [OPTION]        [INPUT_FILE_PATH]"
+    echo "          -i | --image    input is an image"
+    echo "          -v | --video    input is a video"
+}
+
+function Image() {
+    # Check if the image is existed
+    if [ ! -f ${input} ] ; then
+        echo "File does not exist! Please check the file name again."
+        exit -1
+    fi
+
+    # Create a result directory
+    cd Results/
+    mkdir $workingDirectory
+    cd ../
+
+    # Create a working directory for simulating both in Verilog and Python
+    cd Testbenches/
+    mkdir $workingDirectory
+    cd $workingDirectory
+
+    # Copy the input file to the working directory
+    cp "../../${input}" ${fileName}
+
+    ####################################
+    # CONVERT INPUT IMAGE TO TEXT FILE #
+    ####################################
+
+    # Copy script to working directory
+    cp ../../Scripts/Python/Bitmap_Text_Converter.py Bitmap_Text_Converter.py
+
+    echo "Converting ${fileName} to text file..."
+    python3 Bitmap_Text_Converter.py ${fileName} > bitmap.in
+    echo "Done converting!"
+
+    # Remove script after used
+    rm Bitmap_Text_Converter.py
+ 
+    ###########################
+    # SIMULATE USING MODELSIM #
+    ###########################
+
+    # Copy .v files and Testbench.v
+    cp ../../RTL/Colour_Float_To_Int.v Colour_Float_To_Int.v
+    cp ../../RTL/Colour_Int_To_Float.v Colour_Int_To_Float.v
+    cp ../../RTL/FP_Add.v FP_Add.v
+    cp ../../RTL/FP_Mul.v FP_Mul.v
+    cp ../../RTL/REG.v REG.v
+    cp ../../RTL/RGB_Greyscale_Converter.v RGB_Greyscale_Converter.v
+    cp ../Testbench.v Testbench.v
+    
+    echo "Simulating using ModelSim..."
+    # -c option forces vsim to run in command-line mode (no GUI)
+    vsim -c -do ../../Scripts/sim.do
+    echo "Done simulating!"
+
+    # Delete files after used
+    rm Colour_Float_To_Int.v
+    rm Colour_Int_To_Float.v
+    rm FP_Add.v
+    rm FP_Mul.v
+    rm REG.v
+    rm RGB_Greyscale_Converter.v
+    
+    ################################
+    # CONVERT OUTPUT BACK TO IMAGE #
+    ################################
+
+    # Copy script to working directory
+    cp ../../Scripts/Python/Text_Bitmap_Converter.py Text_Bitmap_Converter.py
+
+    echo "Converting text output back to image..."
+    python3 Text_Bitmap_Converter.py
+    echo "Done converting!"
+
+    # Delete file after used
+    rm Text_Bitmap_Converter.py
+
+    ##############################
+    # CONVERT IMAGE USING PYTHON #
+    ##############################
+
+    # Copy script to working directory
+    cp ../../Scripts/Python/Colour_To_Greyscale_Converter.py Colour_To_Greyscale_Converter.py
+
+    echo "Converting using Python..."
+    python3 Colour_To_Greyscale_Converter.py ${fileName}
+    echo "Done converting!"
+
+    # Delete file(s) after used
+    rm Colour_To_Greyscale_Converter.py
+
+    ################
+    # SHOW RESULTS #
+    ################
+    
+    # Copy script to working directory
+    cp ../../Scripts/Python/Images_Comparison.py Images_Comparison.py
+    echo "Showing images..."
+    python3 Images_Comparison.py ${fileName}
+
+    # Delete file(s) after used
+    rm Images_Comparison.py
+
+    #####################################
+    # COPY RESULTS TO RESULTS DIRECTORY #
+    #####################################
+    cp verilog_out.jpg ../../Results/${workingDirectory}/verilog_out.jpg
+    cp python_out.jpg ../../Results/${workingDirectory}/python_out.jpg
+    cp compareimg.jpg ../../Results/${workingDirectory}/compareimg.jpg
+    cp ${fileName} ../../Results/${workingDirectory}/${fileName}
+
+    # Remove result files in Testbench folder
+    rm verilog_out.jpg
+    rm python_out.jpg
+    rm compareimg.jpg
+    rm ${fileName}
+
+    exit 0
+}
+
+function Video() {
+    # Check if the video is existed
+    if [ ! -f ${input} ] ; then
+        echo "File does not exist! Please check the file name again."
+        exit -1
+    fi
+
+    # Create a result directory
+    cd Results/
+    mkdir $workingDirectory
+    cd ../
+
+    # Create a working directory for simulating both in Verilog and Python
+    cd Testbenches/
+    mkdir $workingDirectory
+    cd $workingDirectory
+
+    # Copy the input file to the working directory
+    cp "../../${input}" ${fileName}
+
+    ###############################
+    # CONVERT INPUT VIDEO TO TEXT #
+    ###############################
+
+    # Copy script to working directory
+    cp ../../Scripts/Python/Video_To_Text_Converter.py Video_To_Text_Converter.py
+
+    echo "Converting ${fileName} to text file..."
+    python3 Video_To_Text_Converter.py ${fileName} > bitmap.in
+    echo "Done converting!"
+
+    # Remove script after used
+    rm Video_To_Text_Converter.py
+
+    ###########################
+    # SIMULATE USING MODELSIM #
+    ###########################
+
+    # Copy .v files and Testbench.v
+    cp ../../RTL/Colour_Float_To_Int.v Colour_Float_To_Int.v
+    cp ../../RTL/Colour_Int_To_Float.v Colour_Int_To_Float.v
+    cp ../../RTL/FP_Add.v FP_Add.v
+    cp ../../RTL/FP_Mul.v FP_Mul.v
+    cp ../../RTL/REG.v REG.v
+    cp ../../RTL/RGB_Greyscale_Converter.v RGB_Greyscale_Converter.v
+    cp ../Testbench.v Testbench.v
+    
+    echo "Simulating using ModelSim..."
+    # -c option forces vsim to run in command-line mode (no GUI)
+    vsim -c -do ../../Scripts/sim.do
+    echo "Done simulating!"
+
+    # Delete files after used
+    rm Colour_Float_To_Int.v
+    rm Colour_Int_To_Float.v
+    rm FP_Add.v
+    rm FP_Mul.v
+    rm REG.v
+    rm RGB_Greyscale_Converter.v
+
+    ##############################
+    # CONVERT TEXT BACK TO VIDEO #
+    ##############################
+    
+    # Copy script to working directory
+    cp ../../Scripts/Python/Text_To_Video_Converter.py Text_To_Video_Converter.py
+
+    echo "Converting text output back to video..."
+    python3 Text_To_Video_Converter.py
+    echo "Done converting!"
+
+    # Delete file after used
+    rm Text_To_Video_Converter.py
+
+    ###########################
+    # CONVERTING USING PYTHON #
+    ###########################
+
+    # Copy script to working directory
+    cp ../../Scripts/Python/convertvideo/FunctionConvertVideo.py FunctionConvertVideo.py
+
+    echo "Converting using Python..."
+    python3 FunctionConvertVideo.py ${fileName}
+    echo "Done converting!"
+
+    # Delete script after used
+    rm FunctionConvertVideo.py
+
+    # echo "Showing images..."
+    # python3 compare.py ${input}
+
+    #####################################
+    # COPY RESULTS TO RESULTS DIRECTORY #
+    #####################################
+    cp verilog_out.avi ../../Results/${workingDirectory}/verilog_out.avi
+    cp python_out.avi ../../Results/${workingDirectory}/python_out.avi
+    cp ${fileName} ../../Results/${workingDirectory}/${fileName}
+
+    # Remove result files in Testbench folder
+    rm verilog_out.avi
+    rm python_out.avi
+    rm ${fileName}
+
+    exit 0
+}
+
+# Check if there is no argument
+if [ $# -lt 1 ] ; then
+    printf "Invalid argument! Require at least one argument.\n";
+    exit -1;
+fi
+
+# Check if there is more than 2 arguments
+if [ $# -gt 2 ] ; then
+    printf "Two many arguments. Expect maximum of 2.\n";
+    exit -1;
+fi
+
+input=$2
+
+# Extract file name from inputted path
+fileName=${input##*/}
+
+# Get current date & time
+hour=$(date +%H)
+min=$(date +%M)
+sec=$(date +%S)
+day=$(date +%d)
+month=$(date +%m)
+year=$(date +%Y)
+
+workingDirectory="${fileName}_${day}.${month}.${year}_${hour}.${min}.${sec}"
+
+# Check options correctness
+case $1 in
+  -i | --image)
+    # printf "Option: input image.\n"
+    Image
+    exit 0
+    ;;
+
+  -v | --video)
+    # printf "Option: input video.\n"
+    Video
+    exit 0
+    ;;
+
+  -h | --help)
+    printf "Option: help\n"
+    Help
+    exit 0
+    ;;
+
+  *)
+    printf "Option: not recognised\n"
+    Help
+    exit -1
+    ;;
+esac

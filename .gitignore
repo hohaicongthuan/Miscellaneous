@@ -1,0 +1,9 @@
+.directory 
+**/*.log
+**/*.fls
+**/*.fdb_latexmk
+**/*.aux
+**/*.toc
+**/*.gz
+**/*.out
+**/*.bak

@@ -1,0 +1,15 @@
+**LIB for CE222class***
+.LIB TT
+.lib "45nm_LP.lib" TT
+.lib "45nm_5v.lib" TT
+.ENDL TT
+
+.LIB FF
+.lib "45nm_LP.lib" FF
+.lib "45nm_5v.lib" FF
+.ENDL FF
+
+.LIB SS
+.lib "45nm_LP.lib" SS
+.lib "45nm_5v.lib" SS
+.ENDL SS

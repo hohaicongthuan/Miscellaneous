@@ -1,6 +1,11 @@
 Ring Oscillator
-.include 45nm_LP.lib
-.option TEMP = 25C
+.include 45nm_LP.lib SS
+.option TEMP = -40C
+
+// Capacitance value for Ring Oscillator
+.param cap_val = 1p
+// Resistance value for Ring Oscillator
+.param res_val = 1k
 
     * Syntax for MOSFET
     * MXXXXXXX nd ng ns nb mname <m = val > <l = val> <w = val>
@@ -16,21 +21,21 @@ Ring Oscillator
     M6 gate_3_out res_2_out vdd vdd PMOS
 
     // Resistors
-    R1 gate_1_out res_1_out 1k
-    R2 gate_2_out res_2_out 1k
-    R3 gate_3_out RgOsc_Out 1k
+    R1 gate_1_out res_1_out res_val
+    R2 gate_2_out res_2_out res_val
+    R3 gate_3_out RgOsc_Out res_val
 
     // Capacitors
-    C1 res_1_out 0 1p
-    C2 res_2_out 0 1p
-    C3 RgOsc_Out 0 1p
+    C1 res_1_out 0 cap_val
+    C2 res_2_out 0 cap_val
+    C3 RgOsc_Out 0 cap_val
 
     // Power
-    V1 vdd 0 dc 2.5V
+    V1 vdd 0 dc 0.9V
 
 .control
     * General form: .tran tstep tstop <tstart<tmax>> <uic>
-    tran 1ns 2us
+    tran 1ns 5us
     plot RgOsc_Out
 .endc
 

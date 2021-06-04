@@ -1,0 +1,43 @@
+10ns Delay Circuit
+.include CE222.lib
+.option TEMP = 25C
+
+* .param <name> = <value>
+.param voltage = 1.2V
+
+    * Syntax for MOSFET
+    * MXXXXXXX nd ng ns nb mname <m = val > <l = val> <w = val>
+
+    // FIRST INVERTER
+    M1 W4 In W3 vdd PMOS
+    M2 W4 In 0 0 NMOS
+
+    // SECOND INVERTER
+    M3 Out W4 vdd vdd PMOS
+    M4 Out W4 0 0 NMOS
+
+    // MOS CAPACITOR
+    M5 0 W4 0 0 NMOS l=1u w=2u
+
+    // PMOS 1
+    M6 W1 W1 vdd vdd PMOS
+
+    // PMOS 2
+    M7 W3 W1 vdd vdd PMOS
+
+    // Current
+    V2 W1 0 dc 1uA
+
+    // Power
+    V1 vdd 0 dc voltage
+
+    // PULSE
+    VIN In 0 PWL(0ns 0, 10ns 0, '10ns+100ps' 1.2, 20ns 1.2, '20ns+100ps' 0)
+
+.control
+    * General form: .tran tstep tstop <tstart<tmax>> <uic>
+    tran 1ns 50ns
+    plot In+2 Out
+.endc
+
+.end

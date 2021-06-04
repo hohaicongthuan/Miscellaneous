@@ -1,6 +1,3 @@
-// "http://history.openweathermap.org/data/2.5/history/city?id=1581130&type=hour&start=1618506000&appid=<replace your API key here>";
-
-#include "time.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h>
@@ -25,18 +22,18 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // SERVER & WIFI CONFIGURATION
-const char* ssid      = "Lee Su Min";
-const char* password  = "thuankhung1999";
+#define ssid        "Lee Su Min"
+#define password    "thuankhung1999"
 
 String api_key    = "&appid=<replace your API key here>";
-String city_id    = "city?id=1566083";
-String api_type   = "&type=hour";
-String start_time = "&start=";
-String api_count  = "&cnt=1";
-
+String city_id    = "id=1566083";
+String api_count  = "&cnt=7";
+String units      = "&units=metric";
+// String api_type   = "&type=hour";
+// String start_time = "&start=";
 
 // Your Domain name with URL path or IP address with path
-String serverName = "http://history.openweathermap.org/data/2.5/history/";
+String serverName = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
 // Server Path
 String serverPath;
@@ -46,6 +43,8 @@ String serverPath;
 ////////////////////////////////
 // VARIABLES DECLARATION HERE //
 ////////////////////////////////
+
+int date = 0;
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -57,7 +56,6 @@ unsigned long timerDelay = 5000;
 
 // Store weather data get from weather.com
 String Weather_Data;
-float Weather_Data_Arr[3];
 
 // Values to display on the OLED
 JSONVar display_time,
@@ -95,90 +93,48 @@ int list_city_id[] = {
                 };
 
 String list_city_name[] = {
-                        "Tinh Nghe An",             "Tinh Ninh Binh",
-                        "Tinh Ninh Thuan",          "Tinh Soc Trang",
-                        "Tinh Tra Vinh",            "Tinh Tuyen Quang",
-                        "Tinh Vinh Long",           "Tinh Yen Bai",
-                        "Yen Vinh",                 "Yen Bai",
-                        "Xom Yan Lac Hau",          "Xom Pho",
-                        "Tinh Lao Cai",             "Vung Tau",
-                        "Vinh Yen",                 "Vinh Long",
-                        "Vinh",                     "Viet Tri",
-                        "Uong Bi",                  "Tuy Hoa",
-                        "Tuyen Quang",              "Tra Vinh",
-                        "Tinh Tien Giang",          "Thu Dau Mot",
-                        "Tinh Thua Thien-Hue",      "Tinh Kon Tum",
-                        "Thong Tay Hoi",            "Thon Dien Ha",
-                        "Thon Chiet Bi Ha",         "Huyen Thanh Son",
-                        "Thanh pho Ho Chi Minh",    "Tinh Thanh Hoa",
-                        "Thanh Hoa",                "Thai Nguyen",
-                        "Tinh Thai Binh",           "Thai Binh",
-                        "Tinh Tay Ninh",            "Tay Ninh",
-                        "Tan An",                   "Tam Ky",
-                        "Son Tay",                  "Tinh Son La",
-                        "Huyen Son Duong",          "Son La",
-                        "Song Cau",                 "Soc Trang",
-                        "Sa Pa",                    "Sa Dec",
-                        "Rach Gia",                 "Quy Nhon",
-                        "Tinh Quang Tri",           "Quang Tri",
-                        "Tinh Quang Ninh",          "Tinh Quang Ngai",
-                        "Quang Ngai",               "Tinh Quang Binh",
-                        "Pleiku",                   "Tinh Phu Yen",
-                        "Thi xa Phu Tho",           "Duong GJong",
-                        "Phu Ly",                   "Phu Khuong",
-                        "Phu Huu",                  "Phong Tho",
-                        "Phan Thiet",               "Phan Rang-Thap Cham",
-                        "Ninh Binh",                "Nha Trang",
-                        "Ngo Chau",                 "Tinh Hoa Binh",
-                        "Nam Dinh",                 "My Tho",
-                        "Long Xuyen",               "Tinh Long An",
-                        "Loc Ninh",                 "Lao Cai",
-                        "Tinh Lang Son",            "Lang Son",
-                        "Tinh Lam Dong",            "Lagi",
-                        "Kon Tum",                  "Tinh Kien Giang",
-                        "Tinh Khanh Hoa",           "Hung Yen",
-                        "Hue",                      "Ha Long",
-                        "Hoi An",                   "Thanh pho Ho Chi Minh",
-                        "Tinh Ha Tinh",             "Hoa Binh",
-                        "Tinh Ha Tay",              "Hau Duong",
-                        "Tinh Ha Giang",            "Ha Tinh",
-                        "Ha Tien",                  "Tinh Gia Lai",
-                        "Thu Do Ha Noi",            "Ha Noi",
-                        "Tinh Can Tho",             "Thanh Pho Hai Phong",
-                        "Haiphong",                 "Hai Ha",
-                        "Hai Duong",                "Ha Giang",
-                        "Ha Dong",                  "Tinh Binh Thuan",
-                        "Dong Xoai",                "Tinh Dong Thap",
-                        "Tinh Dong Nai",            "Dong Hoi",
-                        "Dong Ha",                  "Huyen Doan Hung",
-                        "Dien Bien Phu",            "Turan",
-                        "Da Lat",                   "Tinh Dac Lak",
-                        "Ba Ria-Vung Tau",          "Cu Chi",
-                        "Con Son",                  "Chau Doc",
-                        "Cao Lanh",                 "Tinh Cao Bang",
-                        "Cao Bang",                 "Can Tho",
-                        "Can Gio",                  "Can Duoc",
-                        "Cam Ranh",                 "Cam Pha Mines",
-                        "Ca Mau",                   "Buon Ma Thuot",
-                        "Tinh Binh Dinh",           "Bim Son",
-                        "Bien Hoa",                 "Tinh Ben Tre",
-                        "Ben Tre",                  "Bac Ninh",
-                        "Thanh pho Bac Lieu",       "Bac Giang",
-                        "Bac Kan",                  "Ap Van Tu Tay",
-                        "Ap Ba",                    "Tinh An Giang",
-                        "Ben Dinh",                 "Huyen Dien Bien",
-                        "Tinh Bac Ninh",            "Tinh Bac Giang",
-                        "Tinh Da Nang",             "Tinh Binh Duong",
-                        "Tinh Binh Phuoc",          "Tinh Thai Nguyen",
-                        "Tinh Quang Nam",           "Tinh Phu Tho",
-                        "Tinh Nam Dinh",            "Tinh Ha Nam",
-                        "Tinh Bac Kan",             "Tinh Bac Lieu",
-                        "Tinh Ca Mau",              "Tinh Hai Duong",
-                        "Tinh Hung Yen",            "Tinh Vinh Phuc",
-                        "Uyen Hung",                "Huyen Yen Lap",
-                        "Huyen Thanh Hoa",          "Huyen Song Thao",
-                        "Huyen Tam Thanh",          "Huyen Phong Chau",
-                        "Huyen Ba Vi"
+                        "Tinh Nghe An",             "Tinh Ninh Binh",           "Tinh Ninh Thuan",          "Tinh Soc Trang",
+                        "Tinh Tra Vinh",            "Tinh Tuyen Quang",         "Tinh Vinh Long",           "Tinh Yen Bai",
+                        "Yen Vinh",                 "Yen Bai",                  "Xom Yan Lac Hau",          "Xom Pho",
+                        "Tinh Lao Cai",             "Vung Tau",                 "Vinh Yen",                 "Vinh Long",
+                        "Vinh",                     "Viet Tri",                 "Uong Bi",                  "Tuy Hoa",
+                        "Tuyen Quang",              "Tra Vinh",                 "Tinh Tien Giang",          "Thu Dau Mot",
+                        "Tinh Thua Thien-Hue",      "Tinh Kon Tum",             "Thong Tay Hoi",            "Thon Dien Ha",
+                        "Thon Chiet Bi Ha",         "Huyen Thanh Son",          "Thanh pho Ho Chi Minh",    "Tinh Thanh Hoa",
+                        "Thanh Hoa",                "Thai Nguyen",              "Tinh Thai Binh",           "Thai Binh",
+                        "Tinh Tay Ninh",            "Tay Ninh",                 "Tan An",                   "Tam Ky",
+                        "Son Tay",                  "Tinh Son La",              "Huyen Son Duong",          "Son La",
+                        "Song Cau",                 "Soc Trang",                "Sa Pa",                    "Sa Dec",
+                        "Rach Gia",                 "Quy Nhon",                 "Tinh Quang Tri",           "Quang Tri",
+                        "Tinh Quang Ninh",          "Tinh Quang Ngai",          "Quang Ngai",               "Tinh Quang Binh",
+                        "Pleiku",                   "Tinh Phu Yen",             "Thi xa Phu Tho",           "Duong GJong",
+                        "Phu Ly",                   "Phu Khuong",               "Phu Huu",                  "Phong Tho",
+                        "Phan Thiet",               "Phan Rang-Thap Cham",      "Ninh Binh",                "Nha Trang",
+                        "Ngo Chau",                 "Tinh Hoa Binh",            "Nam Dinh",                 "My Tho",
+                        "Long Xuyen",               "Tinh Long An",             "Loc Ninh",                 "Lao Cai",
+                        "Tinh Lang Son",            "Lang Son",                 "Tinh Lam Dong",            "Lagi",
+                        "Kon Tum",                  "Tinh Kien Giang",          "Tinh Khanh Hoa",           "Hung Yen",
+                        "Hue",                      "Ha Long",                  "Hoi An",                   "Thanh pho Ho Chi Minh",
+                        "Tinh Ha Tinh",             "Hoa Binh",                 "Tinh Ha Tay",              "Hau Duong",
+                        "Tinh Ha Giang",            "Ha Tinh",                  "Ha Tien",                  "Tinh Gia Lai",
+                        "Thu Do Ha Noi",            "Ha Noi",                   "Tinh Can Tho",             "Thanh Pho Hai Phong",
+                        "Haiphong",                 "Hai Ha",                   "Hai Duong",                "Ha Giang",
+                        "Ha Dong",                  "Tinh Binh Thuan",          "Dong Xoai",                "Tinh Dong Thap",
+                        "Tinh Dong Nai",            "Dong Hoi",                 "Dong Ha",                  "Huyen Doan Hung",
+                        "Dien Bien Phu",            "Turan",                    "Da Lat",                   "Tinh Dac Lak",
+                        "Ba Ria-Vung Tau",          "Cu Chi",                   "Con Son",                  "Chau Doc",
+                        "Cao Lanh",                 "Tinh Cao Bang",            "Cao Bang",                 "Can Tho",
+                        "Can Gio",                  "Can Duoc",                 "Cam Ranh",                 "Cam Pha Mines",
+                        "Ca Mau",                   "Buon Ma Thuot",            "Tinh Binh Dinh",           "Bim Son",
+                        "Bien Hoa",                 "Tinh Ben Tre",             "Ben Tre",                  "Bac Ninh",
+                        "Thanh pho Bac Lieu",       "Bac Giang",                "Bac Kan",                  "Ap Van Tu Tay",
+                        "Ap Ba",                    "Tinh An Giang",            "Ben Dinh",                 "Huyen Dien Bien",
+                        "Tinh Bac Ninh",            "Tinh Bac Giang",           "Tinh Da Nang",             "Tinh Binh Duong",
+                        "Tinh Binh Phuoc",          "Tinh Thai Nguyen",         "Tinh Quang Nam",           "Tinh Phu Tho",
+                        "Tinh Nam Dinh",            "Tinh Ha Nam",              "Tinh Bac Kan",             "Tinh Bac Lieu",
+                        "Tinh Ca Mau",              "Tinh Hai Duong",           "Tinh Hung Yen",            "Tinh Vinh Phuc",
+                        "Uyen Hung",                "Huyen Yen Lap",            "Huyen Thanh Hoa",          "Huyen Song Thao",
+                        "Huyen Tam Thanh",          "Huyen Phong Chau",         "Huyen Ba Vi"
                       };
 
 //==========================================================================================//
@@ -193,22 +149,20 @@ void setup() {
     Wire.begin(5, 4);
 
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-    if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
         Serial.println(F("SSD1306 allocation failed"));
-        for(;;); // Don't proceed, loop forever
+        for ( ; ; ) ; // Don't proceed, loop forever
     }
 
     WiFi.begin(ssid, password);
     Log_New("Connecting");
-    while(WiFi.status() != WL_CONNECTED) {
+    while (WiFi.status() != WL_CONNECTED) {
         delay(250);
         Log(".");
     }
 
-
     Log_New("Connected to WiFi network with IP Address: ");
     display.print(WiFi.localIP());
-    Log("\nTimer set to 5 seconds (timerDelay variable), it will take 5 seconds before publishing the first reading.");
 }
 
 ////////////////////////
@@ -217,17 +171,13 @@ void setup() {
 
 void loop() {
 
-    //Send an HTTP POST request every 10 minutes
+    //Send an HTTP POST request every ... minutes
     if ((millis() - lastTime) > timerDelay) {
         //Check WiFi connection status
-        if(WiFi.status()== WL_CONNECTED) {
-        
-            // Get the current time and convert to string and
-            // concatenate to start_time
-            start_time += time_to_string(getTime());
+        if (WiFi.status() == WL_CONNECTED) {
 
             // Create serverPath by concatenating all components
-            serverPath = serverName + city_id + api_type + start_time + api_count + api_key;
+            serverPath = serverName + city_id + units + api_count + api_key;
 
             // Making HTTP GET request
             Weather_Data = httpGETRequest(serverPath);
@@ -266,22 +216,14 @@ void loop() {
 
             display.display();
             delay(2000);
+
+            date += 1;
         }
         else {
             Log_New("WiFi Disconnected");
         }
         lastTime = millis();
     }
-
-    //========================================================================//
-
-    //////////////////
-    // OLED DISPLAY //
-    //////////////////
-
-    // Draw a single pixel in white
-    // display.drawPixel(64, 32, SSD1306_WHITE);
-
 }
 
 //==============================================================================//
@@ -317,31 +259,6 @@ String httpGETRequest(String serverPath) {
     return payload;
 }
 
-// Function that gets current epoch time
-unsigned long getTime() {
-    time_t now;
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo)) {
-        //Serial.println("Failed to obtain time");
-        return(0);
-    }
-    time(&now);
-    return now;
-}
-
-// Function that converts time_t to char*
-String time_to_string(time_t time) {
-    String result = "";
-    char digit;
-
-    while (time != 0) {
-        digit = (time % 10) + 48;
-        result = digit + result;
-        time /= 10;
-    }
-    return result;
-}
-
 // This function searches a given city ID in city_id array and returns the index of
 // that city ID in the array
 int SearchID(int city_ID) {
@@ -353,26 +270,25 @@ int SearchID(int city_ID) {
 
 // This function parses the weather data, picks up essential data to display on the OLED
 void Parse_Weather_Data(String weather_data) {
-
-  int city_index;
+    int city_index;
   
-  JSONVar myObject = JSON.parse(weather_data);
+    JSONVar myObject = JSON.parse(weather_data);
 
-  // JSON.typeof(jsonVar) can be used to get the type of the var
-  if (JSON.typeof(myObject) == "undefined") {
-      Log_New("Parsing input failed!");
-      return;
-  }
+    // JSON.typeof(jsonVar) can be used to get the type of the var
+    if (JSON.typeof(myObject) == "undefined") {
+        Log_New("Parsing input failed!");
+        return;
+    }
 
-  city_index = SearchID(int(myObject["city_id"]));
-  display_city_name = list_city_name[city_index];
-  
-  display_time        = myObject["list"][0]["dt"];
-  display_temp        = JSONVar(int(myObject["list"][0]["main"]["temp"]) - 273);
-  display_feel_like   = JSONVar(int(myObject["list"][0]["main"]["feels_like"]) - 273);
-  display_humidity    = myObject["list"][0]["main"]["humidity"];
-  display_wind_speed  = myObject["list"][0]["wind"]["speed"];
-  display_cloud       = myObject["list"][0]["clouds"]["all"];
+    city_index = SearchID(int(myObject["city"]["id"]));
+    display_city_name = list_city_name[city_index];
+
+    display_time        = Date_Converter(int(myObject["list"][date % 7]["dt"]));
+    display_temp        = JSONVar(int(myObject["list"][date % 7]["temp"]["day"]));
+    display_feel_like   = JSONVar(int(myObject["list"][date % 7]["feels_like"]["day"]));
+    display_humidity    = myObject["list"][date % 7]["humidity"];
+    display_wind_speed  = myObject["list"][date % 7]["speed"];
+    display_cloud       = myObject["list"][date % 7]["clouds"];
 }
 
 // This function logs on OLED. Clears screen & prints new text
@@ -394,4 +310,18 @@ void Log(String text) {
     display.print(text);
     display.display();
     delay(1000);
+}
+
+String Date_Converter(int dateString) {
+    String result_date;
+    String delimiter;
+    delimiter = "/";
+    int temp = dateString;
+    int Year  = temp / 31556926 + 1970;
+    temp -= (Year - 1970) * 31556926;
+    int Month = temp / 2629743 + 1;
+    temp -= (Month - 1) * 2629743;
+    int Day = temp / 86400 + 2;
+    result_date = Day + delimiter + Month + delimiter + Year;
+    return result_date;
 }
